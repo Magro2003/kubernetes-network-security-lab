@@ -1,7 +1,10 @@
 # Kubernetes Network & Security Lab — Ściąga z komend
 
 > **Cel:** szybka ściąga z komend używanych podczas budowy projektu.
-> Plik aktualizujemy wraz z kolejnymi etapami: Docker, Kubernetes, networking, troubleshooting i security.
+>
+> Dokument jest rozwijany wraz z projektem i obejmuje polecenia związane z:
+> WSL, Linux, Git, Python, Flask, Docker, Docker Networking, Kubernetes,
+> troubleshootingiem oraz dokumentacją projektu.
 
 ---
 
@@ -16,35 +19,61 @@
 7. [Flask](#7-flask)
 8. [HTTP i diagnostyka](#8-http-i-diagnostyka)
 9. [Docker](#9-docker)
-10. [Kubernetes](#10-kubernetes)
+10. [Docker Networking](#10-docker-networking)
+11. [Kubernetes](#11-kubernetes)
+12. [Pliki i dokumentacja projektu](#12-pliki-i-dokumentacja-projektu)
+13. [Troubleshooting i komendy pomocnicze](#13-troubleshooting-i-komendy-pomocnicze)
 
 ---
 
-## 1. Nawigacja po systemie
+# 1. Nawigacja po systemie
 
-### Sprawdzenie bieżącego katalogu
+## Sprawdzenie bieżącego katalogu
 
 ```bash
 pwd
 ```
 
-Pokazuje pełną ścieżkę do katalogu, w którym aktualnie pracujemy.
+Pokazuje pełną ścieżkę katalogu, w którym aktualnie pracujemy.
 
-### Przejście do katalogu projektu
+---
+
+## Przejście do katalogu projektu
 
 ```bash
 cd ~/projects/kubernetes-network-security-lab
 ```
 
-### Wyświetlenie zawartości katalogu
+---
+
+## Przejście do katalogu Kubernetes
+
+```bash
+cd k8s
+```
+
+---
+
+## Wyświetlenie zawartości katalogu
+
+```bash
+ls
+```
+
+---
+
+## Szczegółowe wyświetlenie zawartości katalogu
 
 ```bash
 ls -la
 ```
 
-Opcja `-a` pokazuje także pliki ukryte, a `-l` szczegółowe informacje.
+- `-l` — szczegółowe informacje,
+- `-a` — również pliki ukryte.
 
-### Wyświetlenie zawartości katalogu `app`
+---
+
+## Wyświetlenie zawartości katalogu `app`
 
 ```bash
 ls -la app
@@ -52,39 +81,67 @@ ls -la app
 
 ---
 
-## 2. WSL i Ubuntu
+# 2. WSL i Ubuntu
 
-### Sprawdzenie stanu WSL
+> Polecenia `wsl` wykonujemy w PowerShell lub terminalu Windows.
+
+## Sprawdzenie stanu WSL
 
 ```powershell
 wsl --status
 ```
 
-### Lista dystrybucji WSL
+---
+
+## Lista dystrybucji WSL
 
 ```powershell
 wsl -l -v
 ```
 
-### Aktualizacja listy pakietów Ubuntu
+Pokazuje zainstalowane dystrybucje oraz informację, czy działają w WSL1 czy WSL2.
+
+---
+
+## Całkowite zatrzymanie WSL
+
+```powershell
+wsl --shutdown
+```
+
+Zatrzymuje wszystkie działające dystrybucje WSL.
+
+Przydatne podczas rozwiązywania problemów z integracją Docker Desktop.
+
+> Po wykonaniu tej komendy może być konieczne ponowne uruchomienie Docker Desktop.
+
+---
+
+## Aktualizacja listy pakietów Ubuntu
 
 ```bash
 sudo apt update
 ```
 
-### Aktualizacja zainstalowanych pakietów
+---
+
+## Aktualizacja zainstalowanych pakietów
 
 ```bash
 sudo apt upgrade -y
 ```
 
-### Sprawdzenie aktualnego użytkownika
+---
+
+## Sprawdzenie aktualnego użytkownika
 
 ```bash
 whoami
 ```
 
-### Informacje o systemie
+---
+
+## Informacje o systemie
 
 ```bash
 uname -a
@@ -94,63 +151,112 @@ uname -a
 cat /etc/os-release
 ```
 
-### Całkowite zatrzymanie WSL
-
-```powershell
-wsl --shutdown
-```
-
-Zatrzymuje wszystkie aktualnie działające dystrybucje WSL.
-
-Przydatne przy pełnym odświeżeniu środowiska WSL.
-
-> Jeśli Docker Desktop korzysta z integracji WSL, po wykonaniu tej komendy może być konieczne ponowne uruchomienie Docker Desktop.
-
 ---
 
-## 3. Cursor
+# 3. Cursor
 
-### Otwarcie bieżącego katalogu w Cursorze
+## Otwarcie bieżącego katalogu w Cursorze
 
 ```bash
 cursor .
 ```
 
+Otwiera aktualny katalog jako projekt w Cursorze.
+
 ---
 
-## 4. Git
+# 4. Git
 
-### Inicjalizacja repozytorium
+## Inicjalizacja repozytorium
 
 ```bash
 git init
 ```
 
-### Zmiana nazwy głównej gałęzi na `main`
+---
+
+## Zmiana nazwy głównej gałęzi na `main`
 
 ```bash
 git branch -m main
 ```
 
-### Sprawdzenie aktualnej gałęzi
+---
+
+## Sprawdzenie aktualnej gałęzi
 
 ```bash
 git branch --show-current
 ```
 
-### Sprawdzenie stanu repozytorium
+---
+
+## Sprawdzenie stanu repozytorium
 
 ```bash
 git status
 ```
 
-### Dodanie konkretnego pliku do staging area
+Jedna z najczęściej używanych komend w projekcie.
+
+Pokazuje m.in.:
+
+- pliki zmodyfikowane,
+- pliki nieśledzone (`untracked`),
+- pliki znajdujące się w staging area.
+
+---
+
+## Dodanie konkretnego pliku do staging area
+
+```bash
+git add <ścieżka-do-pliku>
+```
+
+Przykłady użyte w projekcie:
 
 ```bash
 git add .gitignore
+git add k8s/deployment.yaml
+git add k8s/service.yaml
+git add docs/tests.md
+git add docs/images/tests
 ```
 
-### Sprawdzenie konfiguracji użytkownika Git
+---
+
+## Utworzenie commita
+
+```bash
+git commit -m "Opis zmian"
+```
+
+Przykładowe commity wykonane podczas projektu:
+
+```bash
+git commit -m "Add Kubernetes deployment manifest"
+git commit -m "Add Kubernetes Service manifest"
+git commit -m "Add test screenshots documentation"
+git commit -m "Add project test documentation"
+```
+
+---
+
+## Sprawdzenie różnic w konkretnym pliku
+
+```bash
+git diff -- <plik>
+```
+
+Przykład:
+
+```bash
+git diff -- docs/tests.md
+```
+
+---
+
+## Sprawdzenie konfiguracji użytkownika Git
 
 ```bash
 git config --global --get user.name
@@ -159,21 +265,35 @@ git config --global --get user.email
 
 ---
 
-## 5. Struktura projektu
+# 5. Struktura projektu
 
-### Utworzenie głównych katalogów
+## Utworzenie podstawowych katalogów
 
 ```bash
 mkdir app k8s docs
 ```
 
-### Utworzenie podstawowych plików
+---
+
+## Utworzenie katalogu wraz z brakującymi katalogami nadrzędnymi
+
+```bash
+mkdir -p k8s
+```
+
+Opcja `-p` zapobiega błędowi, jeśli katalog już istnieje.
+
+---
+
+## Utworzenie podstawowych plików
 
 ```bash
 touch README.md .gitignore
 ```
 
-### Placeholdery dla pustych katalogów
+---
+
+## Utworzenie placeholderów dla pustych katalogów
 
 ```bash
 touch app/.gitkeep docs/.gitkeep k8s/.gitkeep
@@ -181,14 +301,42 @@ touch app/.gitkeep docs/.gitkeep k8s/.gitkeep
 
 Git nie śledzi pustych katalogów, dlatego `.gitkeep` może służyć jako placeholder.
 
-### Utworzenie plików aplikacji
+---
+
+## Utworzenie plików aplikacji
 
 ```bash
 touch app/app.py
 touch app/requirements.txt
 ```
 
-### Usunięcie `.gitkeep` z katalogu `app`
+---
+
+## Utworzenie manifestu Deploymentu
+
+```bash
+touch k8s/deployment.yaml
+```
+
+---
+
+## Utworzenie manifestu Service
+
+```bash
+touch k8s/service.yaml
+```
+
+---
+
+## Utworzenie dokumentacji testów
+
+```bash
+touch docs/tests.md
+```
+
+---
+
+## Usunięcie `.gitkeep`
 
 ```bash
 rm app/.gitkeep
@@ -196,89 +344,107 @@ rm app/.gitkeep
 
 ---
 
-## 6. Python i virtual environment
+# 6. Python i virtual environment
 
-### Sprawdzenie wersji Pythona
+## Sprawdzenie wersji Pythona
 
 ```bash
 python3 --version
 ```
 
-### Sprawdzenie modułu `venv`
+---
+
+## Sprawdzenie modułu `venv`
 
 ```bash
 python3 -m venv --help
 ```
 
-### Instalacja obsługi `venv`
+---
+
+## Instalacja obsługi `venv`
 
 ```bash
 sudo apt install python3.12-venv
 ```
 
-### Utworzenie środowiska wirtualnego
+---
+
+## Utworzenie środowiska wirtualnego
 
 ```bash
 python3 -m venv .venv
 ```
 
-### Aktywacja środowiska
+---
+
+## Aktywacja środowiska
 
 ```bash
 source .venv/bin/activate
 ```
 
-Po aktywacji terminal powinien zaczynać się od:
+Po aktywacji terminal powinien zawierać:
 
 ```text
 (.venv)
 ```
 
-### Wyjście ze środowiska
+---
+
+## Wyjście ze środowiska
 
 ```bash
 deactivate
 ```
 
-Nie usuwa `.venv`. Kończy tylko korzystanie z niego w aktualnym terminalu.
+Kończy korzystanie z virtual environment w aktualnym terminalu, ale nie usuwa katalogu `.venv`.
 
-### Usunięcie środowiska
+---
+
+## Usunięcie virtual environment
 
 ```bash
 rm -rf .venv
 ```
 
-> ⚠️ **Uwaga:** `rm -rf` usuwa wskazany katalog bez pytania o potwierdzenie. Zawsze sprawdź ścieżkę przed wykonaniem.
+> ⚠️ `rm -rf` usuwa katalog bez pytania o potwierdzenie. Przed wykonaniem zawsze należy sprawdzić ścieżkę.
 
 ---
 
-## 7. Flask
+# 7. Flask
 
-### Instalacja zależności
+## Instalacja zależności
 
 ```bash
 python -m pip install -r app/requirements.txt
 ```
 
-### Sprawdzenie zainstalowanego Flaska
+---
+
+## Sprawdzenie zainstalowanego Flaska
 
 ```bash
 python -m pip show Flask
 ```
 
-### Uruchomienie aplikacji
+---
+
+## Uruchomienie aplikacji
 
 ```bash
 python app/app.py
 ```
 
-Nasza aplikacja nasłuchuje na porcie:
+Aplikacja projektu nasłuchuje na porcie:
 
 ```text
 8080
 ```
 
-### Zatrzymanie serwera
+---
+
+## Zatrzymanie aplikacji
 
 ```text
 Ctrl+C
@@ -286,9 +452,9 @@ Ctrl+C
 
 ---
 
-## 8. HTTP i diagnostyka
+# 8. HTTP i diagnostyka
 
-### Test endpointu `/`
+## Test głównego endpointu
 
 ```bash
 curl http://localhost:8080/
@@ -300,7 +466,9 @@ Oczekiwana odpowiedź:
 Kubernetes Network & Security Lab
 ```
 
-### Test endpointu `/health`
+---
+
+## Test endpointu health
 
 ```bash
 curl http://localhost:8080/health
@@ -312,128 +480,147 @@ Oczekiwana odpowiedź:
 {"status":"healthy"}
 ```
 
-### Sprawdzenie, czy port `8080` nasłuchuje
+---
+
+## Sprawdzenie, czy port `8080` nasłuchuje
 
 ```bash
 ss -ltnp | grep 8080
 ```
 
-Przydatne podczas diagnozowania problemów z połączeniem do aplikacji.
+Przydatne podczas diagnozowania problemów z dostępem do aplikacji.
 
-### Wyświetlenie `.gitignore`
+---
+
+## Wyświetlenie zawartości pliku
+
+```bash
+cat <plik>
+```
+
+Przykłady:
 
 ```bash
 cat .gitignore
+cat docs/commands.md
+cat k8s/service.yaml
 ```
 
 ---
 
-## 9. Docker
+# 9. Docker
 
-### Sprawdzenie wersji Docker CLI
+## Sprawdzenie wersji Docker CLI
 
 ```bash
 docker --version
 ```
 
-Pokazuje zainstalowaną wersję klienta Docker.
+Pokazuje wersję klienta Docker.
 
-### Informacje o Docker Engine
+---
+
+## Pełna weryfikacja klienta i Docker Engine
+
+```bash
+docker version
+```
+
+Pokazuje osobno informacje o:
+
+- `Client`,
+- `Server`.
+
+Komenda została wykorzystana przy diagnozowaniu integracji Docker Desktop z WSL.
+
+---
+
+## Informacje o Docker Engine
 
 ```bash
 docker info
 ```
 
-Pokazuje szczegółowe informacje o kliencie i Docker Engine.
+---
 
-### Sprawdzenie Docker Compose
+## Sprawdzenie Docker Compose
 
 ```bash
 docker compose version
 ```
 
-Pokazuje wersję pluginu Docker Compose.
-
 ---
 
-### Test instalacji Dockera
+## Test instalacji Dockera
 
 ```bash
 docker run --rm hello-world
 ```
 
-Pobiera testowy obraz `hello-world`, uruchamia kontener i automatycznie usuwa go po zakończeniu.
-
-Opcja:
-
-```text
---rm
-```
-
-oznacza automatyczne usunięcie kontenera po jego zakończeniu.
+Pobiera obraz testowy, uruchamia kontener i automatycznie usuwa go po zakończeniu.
 
 ---
 
-### Budowanie obrazu aplikacji
+## Budowanie obrazu aplikacji
 
 ```bash
 docker build -t kubernetes-network-security-lab:0.1 .
 ```
 
-Buduje obraz na podstawie `Dockerfile`.
-
-- `-t` — nadaje obrazowi nazwę i tag,
-- `kubernetes-network-security-lab` — nazwa obrazu,
-- `0.1` — tag / wersja,
+- `-t` — nazwa i tag obrazu,
 - `.` — bieżący katalog jako build context.
 
-### Lista obrazów
+---
+
+## Lista obrazów
 
 ```bash
 docker image ls
 ```
 
-Pokazuje obrazy dostępne lokalnie.
-
 ---
 
-### Uruchomienie kontenera
+## Utworzenie i uruchomienie kontenera aplikacji
 
 ```bash
 docker run --name kns-lab -p 8080:8080 kubernetes-network-security-lab:0.1
 ```
 
-Tworzy i uruchamia kontener na podstawie naszego obrazu.
-
-- `--name kns-lab` — nadaje kontenerowi nazwę,
-- `-p 8080:8080` — mapuje port hosta `8080` na port `8080` kontenera.
-
-Schemat:
+`docker run`:
 
 ```text
-HOST:CONTAINER
-8080:8080
+docker create + docker start
 ```
 
-### Uruchomienie kontenera w tle
+czyli tworzy nowy kontener i od razu go uruchamia.
+
+---
+
+## Uruchomienie kontenera w tle
 
 ```bash
 docker run -d --name kns-lab -p 8080:8080 kubernetes-network-security-lab:0.1
 ```
 
-Opcja `-d` uruchamia kontener w trybie detached, czyli w tle.
+Opcja:
+
+```text
+-d
+```
+
+uruchamia kontener w trybie detached.
 
 ---
 
-### Działające kontenery
+## Lista działających kontenerów
 
 ```bash
 docker ps
 ```
 
-Pokazuje tylko aktualnie uruchomione kontenery.
+---
 
-### Wszystkie kontenery
+## Lista wszystkich kontenerów
 
 ```bash
 docker ps -a
@@ -443,63 +630,59 @@ Pokazuje również kontenery zatrzymane.
 
 ---
 
-### Zatrzymanie kontenera
+## Zatrzymanie kontenera
 
 ```bash
 docker stop kns-lab
 ```
 
-Zatrzymuje działający kontener.
+---
 
-### Ponowne uruchomienie istniejącego kontenera
+## Uruchomienie istniejącego kontenera
 
 ```bash
 docker start kns-lab
 ```
 
-Uruchamia ponownie wcześniej utworzony kontener.
+W przeciwieństwie do `docker run`, nie tworzy nowego kontenera.
 
-### Usunięcie kontenera
+---
+
+## Usunięcie kontenera
 
 ```bash
 docker rm kns-lab
 ```
 
-Usuwa zatrzymany kontener.
-
-> Usunięcie kontenera nie usuwa obrazu, z którego został utworzony.
+> Usunięcie kontenera nie usuwa obrazu Docker.
 
 ---
 
-### Wyświetlenie logów
+## Wyświetlenie logów kontenera
 
 ```bash
 docker logs kns-lab
 ```
 
-Pokazuje zapisane logi kontenera.
+---
 
-### Śledzenie logów na żywo
+## Śledzenie logów na żywo
 
 ```bash
 docker logs -f kns-lab
 ```
 
-Opcja `-f` (`follow`) śledzi nowe logi na bieżąco.
-
-`Ctrl+C` kończy śledzenie logów, ale nie zatrzymuje kontenera.
+`Ctrl+C` przerywa obserwowanie logów, ale nie zatrzymuje kontenera.
 
 ---
 
-### Wejście do wnętrza kontenera
+## Wejście do działającego kontenera
 
 ```bash
 docker exec -it kns-lab sh
 ```
 
-Uruchamia interaktywną powłokę `sh` wewnątrz działającego kontenera.
-
-Przydatne komendy wewnątrz kontenera:
+Przykładowe komendy wewnątrz kontenera:
 
 ```bash
 pwd
@@ -508,7 +691,7 @@ hostname
 hostname -I
 ```
 
-Wyjście z kontenera:
+Wyjście:
 
 ```bash
 exit
@@ -516,58 +699,21 @@ exit
 
 ---
 
-### Lista sieci Dockera
-
-```bash
-docker network ls
-```
-
-Pokazuje sieci zarządzane przez Docker Engine.
-
-Domyślne sieci to m.in.:
-
-```text
-bridge
-host
-none
-```
-
-### Szczegóły sieci `bridge`
-
-```bash
-docker network inspect bridge
-```
-
-Pokazuje konfigurację domyślnej sieci bridge, m.in.:
-
-- subnet,
-- gateway,
-- podłączone kontenery,
-- ich adresy IPv4.
-
-W naszym środowisku zobaczyliśmy m.in.:
-
-```text
-Subnet:  172.17.0.0/16
-Gateway: 172.17.0.1
-kns-lab: 172.17.0.2
-```
-
----
-
-### Diagnostyka uprawnień Docker Engine
+## Diagnostyka uprawnień Docker Engine
 
 ```bash
 ls -l /var/run/docker.sock
 ```
 
-Pokazuje właściciela i uprawnienia socketu Docker Engine.
+---
 
 ```bash
 id
 ```
 
-Pokazuje użytkownika i jego aktywne grupy.
+Pokazuje użytkownika oraz jego aktywne grupy.
+
+---
 
 ```bash
 getent group docker
@@ -575,13 +721,17 @@ getent group docker
 
 Pokazuje członków grupy `docker`.
 
+---
+
 ```bash
 docker context ls
 ```
 
 Pokazuje dostępne konteksty Docker CLI.
 
-### Tymczasowe odświeżenie grupy `docker`
+---
+
+## Tymczasowe odświeżenie członkostwa w grupie `docker`
 
 ```bash
 newgrp docker
@@ -589,35 +739,523 @@ newgrp docker
 
 Uruchamia nową powłokę z aktywnym członkostwem w grupie `docker`.
 
-> Komenda była potrzebna podczas pierwszej konfiguracji. Po pełnym ponownym uruchomieniu WSL nie powinna być wymagana przy normalnej pracy.
+---
+
+# 10. Docker Networking
+
+## Lista sieci Dockera
+
+```bash
+docker network ls
+```
+
+Domyślne sieci obejmują m.in.:
+
+```text
+bridge
+host
+none
+```
 
 ---
 
-## 10. Kubernetes
+## Inspekcja domyślnej sieci bridge
 
-> ☸️ **Do uzupełnienia w kolejnych etapach projektu.**
+```bash
+docker network inspect bridge
+```
 
-Tutaj będziemy zapisywać komendy związane m.in. z:
+Pokazuje m.in.:
 
-- `kubectl`,
-- Podami,
-- Deploymentami,
-- Service,
-- probes,
-- networkingiem,
-- NetworkPolicy,
-- troubleshootingiem,
-- security.
+- subnet,
+- gateway,
+- podłączone kontenery,
+- adresy IPv4.
 
 ---
 
-## Zasada prowadzenia pliku
+## Utworzenie własnej sieci
 
-Każda nowa istotna komenda będzie zawierała:
+```bash
+docker network create kns-network
+```
 
-- samą komendę,
-- krótkie wyjaśnienie,
-- informację, kiedy jej używamy,
-- ostrzeżenie, jeśli może usuwać lub modyfikować dane.
+Tworzy własną sieć Docker typu `bridge`.
 
-Ten plik ma być jednocześnie **ściągą do projektu** oraz **dziennikiem nauki**.
+---
+
+## Utworzenie sieci izolowanej
+
+```bash
+docker network create kns-isolated
+```
+
+Sieć została użyta podczas testu izolacji kontenerów.
+
+---
+
+## Podłączenie istniejącego kontenera do sieci
+
+```bash
+docker network connect kns-network kns-lab
+```
+
+---
+
+```bash
+docker network connect kns-network kns-client
+```
+
+Kontener może być jednocześnie podłączony do więcej niż jednej sieci Docker.
+
+---
+
+## Inspekcja własnej sieci
+
+```bash
+docker network inspect kns-network
+```
+
+Pokazuje m.in.:
+
+- subnet,
+- gateway,
+- podłączone kontenery,
+- ich adresy IP.
+
+---
+
+## Tymczasowy klient do testów HTTP
+
+```bash
+docker run --rm \
+  --name kns-client \
+  --network kns-network \
+  curlimages/curl:latest \
+  http://kns-lab:8080
+```
+
+Kontener:
+
+1. zostaje utworzony,
+2. wykonuje `curl`,
+3. po zakończeniu zostaje automatycznie usunięty dzięki `--rm`.
+
+---
+
+## Tymczasowy klient z cichym `curl`
+
+```bash
+docker run --rm \
+  --name kns-client \
+  --network kns-network \
+  curlimages/curl:latest \
+  -s http://kns-lab:8080
+```
+
+Opcja `-s` ukrywa pasek postępu `curl`.
+
+---
+
+## Stały kontener klienta do testów sieciowych
+
+```bash
+docker run -dit \
+  --name kns-client \
+  --network kns-isolated \
+  --entrypoint sh \
+  curlimages/curl:latest
+```
+
+Pozwala utrzymać klienta uruchomionego i wykonywać w nim kolejne testy.
+
+---
+
+## Wykonanie `curl` wewnątrz działającego klienta
+
+```bash
+docker exec kns-client \
+  curl -sS --connect-timeout 3 \
+  http://kns-lab:8080
+```
+
+Opcja:
+
+```text
+--connect-timeout 3
+```
+
+ogranicza czas oczekiwania na połączenie do około 3 sekund.
+
+---
+
+## Test komunikacji bezpośrednio po IP
+
+```bash
+docker exec kns-client \
+  curl -sS --connect-timeout 3 \
+  http://172.18.0.2:8080
+```
+
+Użyte podczas sprawdzania, czy problem komunikacji wynika wyłącznie z DNS.
+
+---
+
+## Odczyt IP kontenera w konkretnej sieci
+
+```bash
+docker inspect -f '{{(index .NetworkSettings.Networks "kns-network").IPAddress}}' kns-lab
+```
+
+W wykonanym teście zwróciło:
+
+```text
+172.18.0.2
+```
+
+Adres IP może być inny po ponownym utworzeniu środowiska.
+
+---
+
+# 11. Kubernetes
+
+## Sprawdzenie wersji klienta `kubectl`
+
+```bash
+kubectl version --client
+```
+
+W projekcie użyto:
+
+```text
+kubectl v1.36.1
+```
+
+---
+
+## Wyświetlenie skonfigurowanych kontekstów
+
+```bash
+kubectl config get-contexts
+```
+
+Kontekst określa klaster, z którym komunikuje się `kubectl`.
+
+W projekcie używany jest:
+
+```text
+docker-desktop
+```
+
+---
+
+## Sprawdzenie node'ów klastra
+
+```bash
+kubectl get nodes
+```
+
+Stan:
+
+```text
+Ready
+```
+
+oznacza, że node jest gotowy do pracy.
+
+---
+
+## Zastosowanie manifestu Deploymentu
+
+Z katalogu `k8s`:
+
+```bash
+kubectl apply -f deployment.yaml
+```
+
+Z katalogu głównego projektu:
+
+```bash
+kubectl apply -f k8s/deployment.yaml
+```
+
+---
+
+## Zastosowanie manifestu Service
+
+```bash
+kubectl apply -f k8s/service.yaml
+```
+
+---
+
+## Lista Podów
+
+```bash
+kubectl get pods
+```
+
+Pokazuje m.in.:
+
+- nazwę Poda,
+- `READY`,
+- `STATUS`,
+- liczbę restartów,
+- wiek zasobu.
+
+---
+
+## Lista Deploymentów
+
+```bash
+kubectl get deployments
+```
+
+---
+
+## Sprawdzenie konkretnego Deploymentu
+
+```bash
+kubectl get deployment kns-lab
+```
+
+---
+
+## Lista ReplicaSetów
+
+```bash
+kubectl get replicasets
+```
+
+Pokazuje warstwę zarządzającą Podami:
+
+```text
+Deployment
+    ↓
+ReplicaSet
+    ↓
+Pod
+```
+
+---
+
+## Ręczne usunięcie Poda
+
+```bash
+kubectl delete pod <nazwa-poda>
+```
+
+Przykład użyty podczas testu self-healing:
+
+```bash
+kubectl delete pod kns-lab-7b78dd8fd-fb8zr
+```
+
+Jeżeli Pod jest zarządzany przez ReplicaSet, Kubernetes automatycznie utworzy nową replikę.
+
+---
+
+## Skalowanie Deploymentu do 3 replik
+
+```bash
+kubectl scale deployment kns-lab --replicas=3
+```
+
+---
+
+## Powrót do 1 repliki
+
+```bash
+kubectl scale deployment kns-lab --replicas=1
+```
+
+---
+
+## Lista Service
+
+```bash
+kubectl get services
+```
+
+Pokazuje m.in.:
+
+- nazwę,
+- typ Service,
+- `ClusterIP`,
+- port.
+
+---
+
+## Sprawdzenie EndpointSlice dla Service
+
+```bash
+kubectl get endpointslices \
+  -l kubernetes.io/service-name=kns-lab-service
+```
+
+Pokazuje endpointy backendowe powiązane z danym Service.
+
+---
+
+## Tymczasowy Pod klienta do testu Service
+
+```bash
+kubectl run kns-test-client --rm -it \
+  --image=curlimages/curl:latest \
+  --restart=Never \
+  -- curl -sS http://kns-lab-service:8080
+```
+
+Komenda:
+
+1. tworzy tymczasowy Pod,
+2. uruchamia kontener z `curl`,
+3. wykonuje żądanie HTTP do Service,
+4. po zakończeniu usuwa Pod.
+
+Opcje:
+
+- `--rm` — usuwa Pod po zakończeniu,
+- `-it` — uruchamia sesję interaktywną,
+- `--image` — określa obraz kontenera,
+- `--restart=Never` — tworzy pojedynczy Pod.
+
+---
+
+# 12. Pliki i dokumentacja projektu
+
+## Utworzenie katalogu na screenshoty testów
+
+```bash
+mkdir -p docs/images/tests
+```
+
+---
+
+## Utworzenie pliku dokumentacji testów
+
+```bash
+touch docs/tests.md
+```
+
+---
+
+## Wyświetlenie plików znajdujących się w katalogu
+
+```bash
+find docs/images/tests -type f
+```
+
+---
+
+## Wyszukiwanie paczki ZIP w systemie Windows z poziomu WSL
+
+```bash
+find /mnt/c/Users \
+  -type f \
+  -name 'kns-test-screenshots.zip' \
+  2>/dev/null
+```
+
+---
+
+## Sprawdzenie istnienia i rozmiaru pliku
+
+```bash
+ls -lh /mnt/c/Users/macie/Downloads/kns-test-screenshots.zip
+```
+
+---
+
+## Rozpakowanie wyłącznie plików PNG
+
+```bash
+unzip -j \
+  /mnt/c/Users/macie/Downloads/kns-test-screenshots.zip \
+  '*.png' \
+  -d docs/images/tests
+```
+
+- `-j` — pomija strukturę katalogów z archiwum,
+- `'*.png'` — wypakowuje tylko obrazy PNG,
+- `-d` — określa katalog docelowy.
+
+---
+
+## Sprawdzenie odwołań do screenshotów w `tests.md`
+
+```bash
+grep -o 'images/tests/[^)]*' docs/tests.md | while read -r file; do
+  test -f "docs/$file" || echo "BRAK: $file"
+done
+```
+
+Jeżeli polecenie nic nie wypisze, wszystkie wskazane screenshoty istnieją.
+
+---
+
+# 13. Troubleshooting i komendy pomocnicze
+
+## Wyszukiwanie katalogu kosza w WSL
+
+```bash
+find ~ -type d -path '*/Trash/files' 2>/dev/null
+```
+
+---
+
+## Wyszukiwanie screenshotów i `Zone.Identifier`
+
+```bash
+find ~ -type f \
+  \( -name 'test-*.png*' -o -name '*Zone.Identifier*' \) \
+  2>/dev/null
+```
+
+---
+
+## Usunięcie plików `Zone.Identifier`
+
+```bash
+find docs/images -name '*:Zone.Identifier' -delete
+```
+
+> Polecenie usuwa znalezione pliki. Przed użyciem warto najpierw wykonać analogiczne `find` bez `-delete`.
+
+---
+
+## Wyszukiwanie konkretnego pliku ZIP w katalogu Downloads
+
+```bash
+find /mnt/c/Users/macie/Downloads \
+  -maxdepth 1 \
+  -type f \
+  -iname '*kns*test*screenshot*.zip' \
+  2>/dev/null
+```
+
+---
+
+## Sprawdzenie konkretnego pliku
+
+```bash
+ls -lh <ścieżka-do-pliku>
+```
+
+---
+
+# Zasada prowadzenia pliku
+
+Każda nowa istotna komenda użyta podczas rozwoju projektu powinna zostać zapisana wraz z:
+
+- samą komendą,
+- krótkim opisem zastosowania,
+- informacją, kiedy była używana,
+- ostrzeżeniem, jeśli może usuwać lub modyfikować dane.
+
+Dokument ma pełnić jednocześnie rolę:
+
+1. **ściągi technicznej podczas pracy nad projektem,**
+2. **dziennika nauki,**
+3. **pomocy przy odtwarzaniu procedur testowych,**
+4. **materiału pomocniczego podczas przygotowywania pracy inżynierskiej.**
