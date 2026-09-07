@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: kns-lab
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: kns-lab
+
+  template:
+    metadata:
+      labels:
+        app: kns-lab
+
+    spec:
+      containers:
+        - name: kns-lab
+          image: kubernetes-network-security-lab:0.1
+          ports:
+            - containerPort: 8080
